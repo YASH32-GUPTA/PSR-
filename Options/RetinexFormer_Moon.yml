@@ -1,0 +1,52 @@
+# ----------------- General Settings -----------------
+name: RetinexFormer_Moon_Test
+model_type: ImageCleanModel
+scale: 1
+num_gpu: 1
+manual_seed: 0
+
+# ----------------- Minimal Train Section -----------------
+train:
+  mixing_augs:
+    mixup: false
+  total_iter: 1       # dummy value
+  optim_g:
+    type: Adam
+    lr: 0.0002
+    betas: [0.9, 0.999]
+  pixel_opt:
+    type: L1Loss
+    loss_weight: 1
+    reduction: mean
+
+# ----------------- Dataset Settings -----------------
+datasets:
+  test:
+    name: MoonTest
+    type: SingleImageDataset
+    dataroot_lq: D:/Major/PSR/retinexformer-env/Retinexformer/test_images
+    io_backend:
+      type: disk
+
+# ----------------- Network Settings -----------------
+network_g:
+  type: RetinexFormer
+  in_channels: 3
+  out_channels: 3
+  n_feat: 40
+  stage: 1
+  num_blocks: [ 1,2,2 ]
+
+
+# ----------------- Path Settings -----------------
+path:
+  pretrain_network_g: D:/Major/PSR/retinexformer-env/Retinexformer/experiments/RetinexFormer_LOL_v1/models/net_g_latest.pth
+  results_root: D:/Major/PSR/retinexformer-env/Retinexformer/results/moon_test
+
+# ----------------- Validation Settings -----------------
+val:
+  save_img: true
+  rgb2bgr: true
+  use_image: true
+  metrics: {}       # disables PSNR/SSIM calculation
+  save_gt: false       # prevent saving GT images
